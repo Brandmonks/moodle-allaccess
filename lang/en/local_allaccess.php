@@ -17,3 +17,4 @@ $string['buyurl_desc'] = 'Absolute URL to the external checkout (e.g., https://e
 $string['editpagecontent'] = 'Edit page content';
 $string['content'] = 'Page content (HTML)';
 $string['contentupdated'] = 'Page content updated.';
+$string['buycontent_default'] = '<h3>All-Access</h3><p>Get lifetime access to selected courses. Click the button below to purchase securely.</p><p>{{buybutton}}</p>';

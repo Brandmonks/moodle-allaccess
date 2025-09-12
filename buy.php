@@ -35,31 +35,48 @@ if (!empty($buycontent)) {
 if ($already) {
     echo $OUTPUT->notification(get_string('alreadyowned', 'local_allaccess'), 'notifysuccess');
 } else {
+    // Determine button HTML.
+    $buybuttonhtml = '';
     if ($useexternal && !empty($buyurl)) {
-        // Render a button to external purchase site (admin-configured).
-        echo html_writer::link($buyurl, get_string('buy', 'local_allaccess'), [
+        $buybuttonhtml = html_writer::link($buyurl, get_string('buy', 'local_allaccess'), [
             'class' => 'btn btn-primary',
             'target' => '_blank',
             'rel' => 'noopener'
         ]);
     } else {
-        // Build data-attrs for the payment modal trigger (Moodle core payments).
         $attrs = \core_payment\helper::gateways_modal_link_params(
-            'local_allaccess',   // component
-            'allaccess',         // payment area
-            1,                   // itemid (fixed product)
-            get_string('description', 'local_allaccess') // description
+            'local_allaccess',
+            'allaccess',
+            1,
+            get_string('description', 'local_allaccess')
         );
-
         $gateways = \core_payment\helper::get_available_gateways('local_allaccess', 'allaccess', 1);
         if (empty($gateways)) {
             echo $OUTPUT->notification(get_string('nogateways', 'local_allaccess'), 'notifyproblem');
         } else {
-            echo html_writer::tag('button', get_string('buy', 'local_allaccess'),
+            $buybuttonhtml = html_writer::tag('button', get_string('buy', 'local_allaccess'),
                 $attrs + ['class' => 'btn btn-primary']);
-            // Boot the modal JS.
             $PAGE->requires->js_call_amd('core_payment/gateways_modal', 'init');
         }
+    }
+
+    // Content with optional placeholder.
+    $content = $buycontent;
+    if (trim($content) === '') {
+        $content = get_string('buycontent_default', 'local_allaccess');
+    }
+
+    if (!empty($buybuttonhtml)) {
+        if (preg_match('/\{\{\s*buybutton\s*\}\}/i', $content)) {
+            $content = preg_replace('/\{\{\s*buybutton\s*\}\}/i', $buybuttonhtml, $content);
+            echo html_writer::div(format_text($content, FORMAT_HTML, ['context' => $context, 'filter' => true, 'noclean' => true]));
+        } else {
+            echo html_writer::div(format_text($content, FORMAT_HTML, ['context' => $context, 'filter' => true, 'noclean' => true]));
+            echo html_writer::div($buybuttonhtml, 'mt-3');
+        }
+    } else {
+        // No button available; just show content.
+        echo html_writer::div(format_text($content, FORMAT_HTML, ['context' => $context, 'filter' => true, 'noclean' => true]));
     }
 }
 

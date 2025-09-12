@@ -27,9 +27,11 @@ if ($data = $mform->get_data()) {
 
 // Defaults.
 $current = (string)get_config('local_allaccess', 'buycontent');
+if (trim($current) === '') {
+    $current = get_string('buycontent_default', 'local_allaccess');
+}
 $mform->set_data(['content' => ['text' => $current, 'format' => FORMAT_HTML]]);
 
 echo $OUTPUT->header();
 $mform->display();
 echo $OUTPUT->footer();
-
