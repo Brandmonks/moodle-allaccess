@@ -9,6 +9,9 @@ class buycontent_form extends \moodleform {
     public function definition() {
         $mform = $this->_form;
 
+        $mform->addElement('text', 'title', get_string('title', 'local_allaccess'), ['size' => 60]);
+        $mform->setType('title', PARAM_TEXT);
+
         $mform->addElement('editor', 'content', get_string('content', 'local_allaccess'), null, [
             'maxfiles' => 0,
             'trusttext' => true,
@@ -19,4 +22,3 @@ class buycontent_form extends \moodleform {
         $this->add_action_buttons(true, get_string('savechanges'));
     }
 }
-

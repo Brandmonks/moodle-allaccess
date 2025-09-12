@@ -7,8 +7,12 @@ require_capability('local/allaccess:buy', $context);
 
 $PAGE->set_context($context);
 $PAGE->set_url(new moodle_url('/local/allaccess/buy.php'));
-$PAGE->set_title(get_string('buy', 'local_allaccess'));
-$PAGE->set_heading(get_string('buy', 'local_allaccess'));
+$buytitle = trim((string)get_config('local_allaccess', 'buytitle'));
+if ($buytitle === '') {
+    $buytitle = get_string('buy', 'local_allaccess');
+}
+$PAGE->set_title($buytitle);
+$PAGE->set_heading($buytitle);
 
 $useexternal = (int)get_config('local_allaccess', 'useexternal');
 $buyurl = trim((string)get_config('local_allaccess', 'buyurl'));
@@ -22,7 +26,7 @@ echo $OUTPUT->header();
 // Show quick edit link when edit mode is on and user can configure.
 if ($PAGE->user_is_editing() && has_capability('local/allaccess:configure', $context)) {
     $editurl = new moodle_url('/local/allaccess/edit.php');
-    echo html_writer::div(html_writer::link($editurl, get_string('editpagecontent', 'local_allaccess'), [
+    echo html_writer::div(html_writer::link($editurl, get_string('editpage', 'local_allaccess'), [
         'class' => 'btn btn-secondary mb-3'
     ]));
 }

@@ -22,6 +22,11 @@ if ($mform->is_cancelled()) {
 if ($data = $mform->get_data()) {
     $text = is_array($data->content) ? ($data->content['text'] ?? '') : (string)$data->content;
     set_config('buycontent', $text, 'local_allaccess');
+    $title = trim((string)($data->title ?? ''));
+    if ($title === '') {
+        $title = get_string('buy', 'local_allaccess');
+    }
+    set_config('buytitle', $title, 'local_allaccess');
     redirect(new moodle_url('/local/allaccess/buy.php'), get_string('contentupdated', 'local_allaccess'));
 }
 
@@ -30,7 +35,14 @@ $current = (string)get_config('local_allaccess', 'buycontent');
 if (trim($current) === '') {
     $current = get_string('buycontent_default', 'local_allaccess');
 }
-$mform->set_data(['content' => ['text' => $current, 'format' => FORMAT_HTML]]);
+$currenttitle = trim((string)get_config('local_allaccess', 'buytitle'));
+if ($currenttitle === '') {
+    $currenttitle = get_string('buy', 'local_allaccess');
+}
+$mform->set_data([
+    'title' => $currenttitle,
+    'content' => ['text' => $current, 'format' => FORMAT_HTML]
+]);
 
 echo $OUTPUT->header();
 $mform->display();
