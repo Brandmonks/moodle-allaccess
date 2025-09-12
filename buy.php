@@ -12,11 +12,25 @@ $PAGE->set_heading(get_string('buy', 'local_allaccess'));
 
 $useexternal = (int)get_config('local_allaccess', 'useexternal');
 $buyurl = trim((string)get_config('local_allaccess', 'buyurl'));
+$buycontent = (string)get_config('local_allaccess', 'buycontent');
 
 $cohortid = (int)get_config('local_allaccess', 'cohortid');
 $already  = $cohortid && $DB->record_exists('cohort_members', ['cohortid' => $cohortid, 'userid' => $USER->id]);
 
 echo $OUTPUT->header();
+
+// Show quick edit link when edit mode is on and user can configure.
+if ($PAGE->user_is_editing() && has_capability('local/allaccess:configure', $context)) {
+    $editurl = new moodle_url('/local/allaccess/edit.php');
+    echo html_writer::div(html_writer::link($editurl, get_string('editpagecontent', 'local_allaccess'), [
+        'class' => 'btn btn-secondary mb-3'
+    ]));
+}
+
+// Optional custom HTML content.
+if (!empty($buycontent)) {
+    echo html_writer::div(format_text($buycontent, FORMAT_HTML, ['context' => $context, 'filter' => true, 'noclean' => true]), 'mb-3');
+}
 
 if ($already) {
     echo $OUTPUT->notification(get_string('alreadyowned', 'local_allaccess'), 'notifysuccess');

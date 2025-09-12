@@ -14,3 +14,6 @@ $string['useexternal'] = 'Use external buy website';
 $string['useexternal_desc'] = 'When enabled, the Buy button links to the external URL instead of Moodle payment modal.';
 $string['buyurl'] = 'External buy URL';
 $string['buyurl_desc'] = 'Absolute URL to the external checkout (e.g., https://example.com/checkout).';
+$string['editpagecontent'] = 'Edit page content';
+$string['content'] = 'Page content (HTML)';
+$string['contentupdated'] = 'Page content updated.';
