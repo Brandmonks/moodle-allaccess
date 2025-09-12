@@ -31,11 +31,6 @@ if ($PAGE->user_is_editing() && has_capability('local/allaccess:configure', $con
     ]));
 }
 
-// Optional custom HTML content.
-if (!empty($buycontent)) {
-    echo html_writer::div(format_text($buycontent, FORMAT_HTML, ['context' => $context, 'filter' => true, 'noclean' => true]), 'mb-3');
-}
-
 if ($already) {
     echo $OUTPUT->notification(get_string('alreadyowned', 'local_allaccess'), 'notifysuccess');
 } else {
@@ -79,7 +74,8 @@ if ($already) {
             echo html_writer::div($buybuttonhtml, 'mt-3');
         }
     } else {
-        // No button available; just show content.
+        // No button available; remove placeholder and show content.
+        $content = preg_replace('/\{\{\s*buybutton\s*\}\}/i', '', $content);
         echo html_writer::div(format_text($content, FORMAT_HTML, ['context' => $context, 'filter' => true, 'noclean' => true]));
     }
 }
