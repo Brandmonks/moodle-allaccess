@@ -48,4 +48,20 @@ if ($hassiteconfig) {
         0,
         $cohortmenu
     ));
+
+    // External buy website configuration.
+    $settings->add(new admin_setting_configcheckbox(
+        'local_allaccess/useexternal',
+        get_string('useexternal', 'local_allaccess'),
+        get_string('useexternal_desc', 'local_allaccess'),
+        0
+    ));
+
+    $settings->add(new admin_setting_configtext(
+        'local_allaccess/buyurl',
+        get_string('buyurl', 'local_allaccess'),
+        get_string('buyurl_desc', 'local_allaccess'),
+        '',
+        PARAM_URL
+    ));
 }
